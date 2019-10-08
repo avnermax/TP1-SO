@@ -18,12 +18,12 @@ typedef struct Ordem {
 static char summonsIn= '\0';
 static int register_ch = 0;
 
-void frac_summons(char *summons, Command *act ){		
+void frac_summons(char *summons, Command *act ){
 /*Comment:
 	Usa strtok pra separar a linha de comando em palavras p/ consulta.
-*/	
+*/
 	char *aux;
-	aux= strtok (summons," \n");	
+	aux= strtok (summons," \n");
 	int i= 0;
 	while (aux != NULL) {
 		act->argv[i] = aux;
@@ -37,43 +37,43 @@ void frac_summons(char *summons, Command *act ){
 
 
 int main(int argc, char* argv[]) {
-	int i,iStatus,fdp[2];
-	pipe(fdp);
-	pid_t pid;	
+	int i, iStatus, fd[2];
+	pipe(fd);
+	pid_t pid;
 	static char *summons,*altern,**parameters[10];
 	summons=(char*)malloc(150*sizeof(char));
-	altern=(char*)malloc(150*sizeof(char));	
+	altern=(char*)malloc(150*sizeof(char));
 	Command act ;
 	//welcomeMessage();
 	for(i = 0; i < 10; i++)
 		parameters[i] = malloc(sizeof(char) * 2);
-	
+
 	lap:while(TRUE) {
-		
+
 		printf("\nsummons: ");
 		fgets(summons,150,stdin);
-		i=strlen(summons)-2;			
+		i=strlen(summons)-2;
 		summons=realloc(summons,i*sizeof(char));
-		if(strcmp(summons,"exit\n")==0 || strcmp(summons,"end\n")==0 || strcmp(summons,"quit\n")==0 ||strcmp(summons,"fim\n")==0) 
-			break;			
+		if(strcmp(summons,"exit\n")==0 || strcmp(summons,"end\n")==0 || strcmp(summons,"quit\n")==0 ||strcmp(summons,"fim\n")==0)
+			break;
 		else{
-			frac_summons(summons,&act);			
-			pid=fork();						
+			frac_summons(summons,&act);
+			pid=fork();
 			if(pid==0){
-				close(fdp[1]);
+				close(fd[1]);
 				//printf("\n\tCriado o processo %d", pid);
 				execvp(act.argv[0],act.argv);
-				fprintf(stderr, "\n Failed to exec %s \n",summons);				
-				//printf("");				
-				//dup2(fdp[0], 0);
+				fprintf(stderr, "\n Failed to exec %s \n",summons);
+				//printf("");
+				//dup2(fd[0], 0);
 				//printf("\n\tfim do processo %d", pid);
-			}			
+			}
 			else{
-				close(fdp[0	]);
+				close(fd[0	]);
 				//printf("\nCriado o processo %d", pid);
-				
+
 				//perror("Error dup()") ;
-				
+
       				while(TRUE){
          				//printf("\nEsperando o status do filho de %d.",pid);
          				waitpid(pid,&iStatus,WCONTINUED);
@@ -94,12 +94,12 @@ int main(int argc, char* argv[]) {
          				}
      				}
 				//waitpid( pid,&status,FALSE);
-				
-				
-			}		
-				
+
+
+			}
+
 		}
 	}
-	
+
 	return 0;
 }
