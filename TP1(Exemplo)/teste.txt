@@ -1,0 +1,4 @@
+ls -a
+ls -a
+ls -la
+shutdown -r noww
