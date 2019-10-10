@@ -29,6 +29,7 @@ int fracArg(char **shift, char *summons){
 	}
 
 	return i;
+	printf("Passou no fracArg\n");
 }
 
 void readData(FILE *data, char *summons){
