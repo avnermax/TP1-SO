@@ -15,11 +15,11 @@ int main(int argc, char* argv[]) {
 	while(TRUE){
 		// argc determina se entrada inicial eh terminal ou arquivo
 		switch(argc){
-			case 1 :
+			case 1:
 				print_prompt();
 				collet_summons(summons);
 				break;
-			case 2 :
+			case 2:
 				read_data(data,summons);
 				break;
 			default: printf("Algo errado, Tente novamente");
