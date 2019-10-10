@@ -1,30 +1,31 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <fcntl.h>
-#include <sys/types.h>
+#include <string.h>
 #include <unistd.h>
-#include <sys/stat.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define TRUE 1
 #define FALSE 0
 #define SIZE 512
 
-typedef struct Orde {
+typedef struct Orde{
 	int num;
-  int argc;
-  char *argv[100];
+	int argc;
+	char *argv[512];
 }Command;
 
-void print_prompt();
+void printPrompt();
 
-int frac_orde(char **shift,char *summons);
+void colletSummons(char *summons);
 
-void frac_summons(char *summons,Command **act, int j);
+int fracArg(char **shift, char *summons);
 
-void read_data(FILE *data, char *summons);
+void fracSummons(char *summons, Command *act, int j);
 
-void command_interpreter(Command **act,char *summons,int daddy);
+void readData(FILE *data, char *summons);
 
-FILE * op_data(char *arq);
+void cmdInterpreter(Command *act, char *summons, int daddy);
+
+FILE * opData(char *arq);
