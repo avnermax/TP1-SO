@@ -27,12 +27,14 @@ int main(int argc, char* argv[]){
 			break;
 
 			case 2:
+				printf("teste\n");
 				readData(data, summons);
 			break;
-			
+
 			default: printf("Algo errado, tente novamente.");
 		}
 
+		printf("%s\n", summons);
 		cmdInterpreter(act, summons);
 
 		pid = fork();
@@ -43,9 +45,9 @@ int main(int argc, char* argv[]){
 			break;
 
 			case 0:
-				close(STD_OUTPUT);	// closing standard output
-				dup(fd[WRITE]);		// make standard output go to pipe
-				close(fd[READ]);	// close file descriptors
+				close(fd[STD_OUTPUT]);	// closing standard output
+				dup(fd[WRITE]);			// make standard output go to pipe
+				close(fd[READ]);		// close file descriptors
 				close(fd[WRITE]);
 
 				execvp(act[0].argv[0], act[0].argv);
@@ -54,12 +56,14 @@ int main(int argc, char* argv[]){
 			default:
 				wait(NULL);
 
-				close(STD_INPUT);	// close standard input
-				dup(fd[READ]);		// make standard output go to pipe
-				close(fd[READ]);	// close file descriptors
+				close(fd[STD_INPUT]);	// close standard input
+				dup(fd[READ]);			// make standard output go to pipe
+				close(fd[READ]);		// close file descriptors
 				close(fd[WRITE]);
 
-				execvp(act[1].argv[0], act[1].argv);
+				if(existePipe(summons)){
+					execvp(act[1].argv[0], act[1].argv);
+				}
 			break;
 		}
 	}

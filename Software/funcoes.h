@@ -18,7 +18,7 @@
 
 typedef struct T_Command{
 	int argc;
-	char *argv[SIZE], *string;
+	char *argv[SIZE];
 }Command;
 
 void printPrompt();

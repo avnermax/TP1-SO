@@ -52,7 +52,7 @@ int fracArg(char **shift, char *string){
 
 	aux = strtok(string, " ");
 	while (aux != NULL){
-		// shift[i] = (char*) malloc(strlen(aux) * sizeof(char));
+		shift[i] = (char*) malloc(strlen(aux) * sizeof(char));
 		strcpy(shift[i], aux);
 		aux = strtok(NULL, " ");
 		i++;
@@ -73,8 +73,7 @@ void cmdInterpreter(Command *act, char *summons){
 		if(existePipe(summons)){
 			stringAux = fracPipe(summons);
 			for(x = 0; x < NPIPES; x++){
-				act[x].string = stringAux[x];
-				act[x].argc = fracArg(act[x].argv, act[x].string);
+				act[x].argc = fracArg(act[x].argv, stringAux[x]);
 				i = act[x].argc - 1;
 				j = strlen(act[x].argv[i]) - 1;
 				if (act[x].argv[i][j] == '\n') act[x].argv[i][j] = '\0';
