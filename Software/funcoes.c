@@ -31,6 +31,7 @@ int fracArg(char **shift, char *summons){
 void readData(FILE *data, char *summons){
 	if(!feof(data)){
 		fgets(summons, SIZE, data);
+		printf("%s\n", summons);
 	}else{
 		fclose(data);
 		exit(EXIT_SUCCESS);

@@ -55,10 +55,7 @@ int main(int argc, char* argv[]){
 			}
 		}else{
 			printf("Filho em execução: %d\n", getpid());
-
 			execvp(act->argv[0], act->argv);
-			// fprintf(stderr, "\n Failed to exec %s \n", summons);
-			// perror("Error dup()");
 		}
 	}
 	return 0;
