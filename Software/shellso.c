@@ -24,10 +24,12 @@ int main(int argc, char* argv[]){
 			case 1:
 				printPrompt();
 				collectSummons(summons);
-				break;
+			break;
+
 			case 2:
 				readData(data, summons);
-				break;
+			break;
+			
 			default: printf("Algo errado, tente novamente.");
 		}
 

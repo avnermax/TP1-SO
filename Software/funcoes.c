@@ -15,6 +15,7 @@ int existePipe(char *summons){
 	for(int i = 0; i < strlen(summons); i++){
 		if(summons[i] == '|') p++;
 	}
+	printf("Passou no existePipe\n");
 	return p;
 }
 
@@ -41,8 +42,8 @@ char ** fracPipe(char *summons){
 	}
 
 	shift[i] = NULL;
-	return shift;
 	printf("Passou no fracPipe\n");
+	return shift;
 }
 
 int fracArg(char **shift, char *string){
@@ -57,8 +58,8 @@ int fracArg(char **shift, char *string){
 		i++;
 	}
 	shift[i] = NULL;
-	return i;
 	printf("Passou no fracArg\n");
+	return i;
 }
 
 void cmdInterpreter(Command *act, char *summons){
@@ -106,6 +107,6 @@ FILE * opData(char *arq){
 		exit(EXIT_FAILURE);
 		return 0;
 	}
-	return data;
 	printf("Passou no opData\n");
+	return data;
 }
