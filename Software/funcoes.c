@@ -1,16 +1,11 @@
 #include "funcoes.h"
 
 void printPrompt(){
-	char s[SIZE];
-	printf("\033[1;31m%s\033[0m \033[1;34m %d summons:\033[0m ",getcwd(s, 100),getpid());
+	printf("summons:> ");
 }
 
-void colletSummons(char *summons){
-	int i;
-	scanf("%s", summons);
-	i = strlen(summons)-2;
-	summons = realloc(summons, i * sizeof(char));
-	//strcpy(altern,summons);
+void collectSummons(char *summons){
+	fgets(summons, SIZE, stdin);
 	printf("Passou no collectSummons\n");
 }
 
@@ -28,6 +23,7 @@ int fracArg(char **shift, char *summons){
 		i++;
 	}
 
+	shift[i] = NULL;
 	return i;
 	printf("Passou no fracArg\n");
 }
@@ -44,9 +40,15 @@ void readData(FILE *data, char *summons){
 
 void cmdInterpreter(Command *act, char *summons, int daddy){
 	if(strcmp(summons, "fim\n") == 0){
-		kill(daddy, SIGKILL);
+		printf("Passou no cmdInterpreter\n");
+		exit(EXIT_SUCCESS);
 	}else{
 		act->argc = fracArg(act->argv, summons);
+
+		int x = act->argc - 1;
+		int y = strlen(act->argv[x]) - 1;
+		if (act->argv[x][y] == '\n')
+			act->argv[x][y] = '\0';
 	}
 	printf("Passou no cmdInterpreter\n");
 }

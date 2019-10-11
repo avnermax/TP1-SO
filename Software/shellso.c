@@ -17,16 +17,16 @@ int main(int argc, char* argv[]){
 
 	daddy = getpid();
 	while(TRUE){
-		// argc determina se entrada inicial eh terminal ou arquivo
+		// "argc" determina se entrada inicial eh terminal ou arquivo
 		switch(argc){
 			case 1:
 				printPrompt();
-				colletSummons(summons);
+				collectSummons(summons);
 				break;
 			case 2:
 				readData(data, summons);
 				break;
-			default: printf("Algo errado, Tente novamente");
+			default: printf("Algo errado, tente novamente.");
 		}
 
 		cmdInterpreter(act, summons, daddy);
@@ -34,15 +34,12 @@ int main(int argc, char* argv[]){
 		pid = fork();
 		if(pid < 0){
 			printf("Erro no fork.\n");
-			return 0;
+			exit(EXIT_FAILURE);
 		}
 
 		if(pid != 0){
-			// close(fd[0]);
 			while(TRUE){
-				// printf("pid ant.waitpid: %d\n", getpid());
 				waitpid(pid, &iStatus, WUNTRACED);
-				// printf("pid dep.waitpid: %d\n", getpid());
 
 				if(WIFEXITED(iStatus)) {
 					printf("\nStatus de termino: %d.\n", WEXITSTATUS(iStatus));
@@ -57,22 +54,11 @@ int main(int argc, char* argv[]){
 				}
 			}
 		}else{
-			// close(fd[1]);
 			printf("Filho em execução: %d\n", getpid());
-			//if(strcmp(summons,"fim\n")==0)
-				//break;
-			if(strcmp("cd", act->argv[0]) == 0) {
-				if (act->argv[1] == NULL) {
-					chdir(getenv("HOME"));
-				}else{
-					if (chdir(act->argv[1]) < 0)
-						printf("%s: diretorio não encontrado\n", act->argv[1]);
-				}
-			}else{
-				execvp(summons, act->argv);
-				fprintf(stderr, "\n Failed to exec %s \n", summons);
-				perror("Error dup()") ;
-			}
+
+			execvp(act->argv[0], act->argv);
+			// fprintf(stderr, "\n Failed to exec %s \n", summons);
+			// perror("Error dup()");
 		}
 	}
 	return 0;

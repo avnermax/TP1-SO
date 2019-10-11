@@ -10,15 +10,14 @@
 #define FALSE 0
 #define SIZE 512
 
-typedef struct Orde{
-	int num;
+typedef struct T_Command{
 	int argc;
-	char *argv[512];
+	char *argv[SIZE];
 }Command;
 
 void printPrompt();
 
-void colletSummons(char *summons);
+void collectSummons(char *summons);
 
 int fracArg(char **shift, char *summons);
 
