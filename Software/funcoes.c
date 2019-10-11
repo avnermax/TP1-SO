@@ -66,6 +66,7 @@ void cmdInterpreter(Command *act, char *summons){
 			stringAux = fracPipe(summons);
 			if(stringAux != NULL){
 				for(x = 0; x < NPIPES; x++){
+					printf("string[%d]: %s\n", x, stringAux[x]);
 					act[x].argc = fracArg(act[x].argv, stringAux[x]);
 					// Normaliza o final do comando, caso ele tenha um '\n'.
 					i = act[x].argc - 1;
@@ -80,7 +81,6 @@ void cmdInterpreter(Command *act, char *summons){
 			j = strlen(act[0].argv[i]) - 1;
 			if (act[0].argv[i][j] == '\n') act[0].argv[i][j] = '\0';
 		}
-
 	}
 	// printf("Passou no cmdInterpreter\n");
 }

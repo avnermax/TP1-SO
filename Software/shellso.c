@@ -13,6 +13,7 @@ int main(int argc, char* argv[]){
 		perror("Falha ao criar o pipe.");
 		exit(EXIT_FAILURE);
 	}
+	
 	pid_t pid;
 	system("clear");
 
@@ -33,7 +34,6 @@ int main(int argc, char* argv[]){
 			default: printf("Algo errado, tente novamente.");
 		}
 
-		printf("%s\n", summons);
 		cmdInterpreter(act, summons);
 
 		pid = fork();

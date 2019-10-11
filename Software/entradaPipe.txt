@@ -1,2 +1,3 @@
 cat entradaNormal.txt | grep l
+ls -la
 fim
