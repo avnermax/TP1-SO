@@ -6,7 +6,7 @@ void printPrompt(){
 
 void collectSummons(char *summons){
 	fgets(summons, SIZE, stdin);
-	printf("Passou no collectSummons\n");
+	// printf("Passou no collectSummons\n");
 }
 
 int existePipe(char *summons){
@@ -15,34 +15,26 @@ int existePipe(char *summons){
 	for(int i = 0; i < strlen(summons); i++){
 		if(summons[i] == '|') p++;
 	}
-	printf("Passou no existePipe\n");
+	// printf("Passou no existePipe\n");
 	return p;
 }
 
 char ** fracPipe(char *summons){
-	int i = 0, x, tam;
-	char *aux, *aux2, **shift;
+	int i = 0;
+	char *aux, **shift;
 
 	shift = (char**) malloc(NPIPES * sizeof(char));
 
-	aux2 = strtok(summons, "|");
-	while (aux != NULL){
+	aux = strtok(summons, "|");
+	while(aux != NULL){
 		shift[i] = (char*) malloc(strlen(aux) * sizeof(char));
-		printf("pipe:%d cmd:%s\n", i, aux2);
-		strcpy(shift[i], aux2);
+		strcpy(shift[i], aux);
 		aux = strtok(NULL, "|");
-
-		// Remove espaço vazio no início e no fim da palavra.
-		tam = strlen(aux)-2;
-		aux2 = (char*) malloc(tam * sizeof(char));
-		if(aux[0] == ' ')
-			for(x = 1; x <= tam; x++)
-				aux2[x - 1] = aux[x];
 		i++;
 	}
 
 	shift[i] = NULL;
-	printf("Passou no fracPipe\n");
+	// printf("Passou no fracPipe\n");
 	return shift;
 }
 
@@ -58,7 +50,7 @@ int fracArg(char **shift, char *string){
 		i++;
 	}
 	shift[i] = NULL;
-	printf("Passou no fracArg\n");
+	// printf("Passou no fracArg\n");
 	return i;
 }
 
@@ -67,26 +59,30 @@ void cmdInterpreter(Command *act, char *summons){
 	char **stringAux;
 
 	if(strcmp(summons, "fim\n") == 0){
-		printf("Passou no cmdInterpreter\n");
+		// printf("Passou no cmdInterpreter\n");
 		exit(EXIT_SUCCESS);
 	}else{
 		if(existePipe(summons)){
 			stringAux = fracPipe(summons);
-			for(x = 0; x < NPIPES; x++){
-				act[x].argc = fracArg(act[x].argv, stringAux[x]);
-				i = act[x].argc - 1;
-				j = strlen(act[x].argv[i]) - 1;
-				if (act[x].argv[i][j] == '\n') act[x].argv[i][j] = '\0';
+			if(stringAux != NULL){
+				for(x = 0; x < NPIPES; x++){
+					act[x].argc = fracArg(act[x].argv, stringAux[x]);
+					// Normaliza o final do comando, caso ele tenha um '\n'.
+					i = act[x].argc - 1;
+					j = strlen(act[x].argv[i]) - 1;
+					if (act[x].argv[i][j] == '\n') act[x].argv[i][j] = '\0';
+				}
 			}
 		}else{
 			act[0].argc = fracArg(act[0].argv, summons);
+			// Normaliza o final do comando, caso ele tenha um '\n'.
 			i = act[0].argc - 1;
 			j = strlen(act[0].argv[i]) - 1;
 			if (act[0].argv[i][j] == '\n') act[0].argv[i][j] = '\0';
 		}
 
 	}
-	printf("Passou no cmdInterpreter\n");
+	// printf("Passou no cmdInterpreter\n");
 }
 
 void readData(FILE *data, char *summons){
@@ -96,7 +92,7 @@ void readData(FILE *data, char *summons){
 		fclose(data);
 		exit(EXIT_SUCCESS);
 	}
-	printf("Passou no readData\n");
+	// printf("Passou no readData\n");
 }
 
 FILE * opData(char *arq){
@@ -106,6 +102,6 @@ FILE * opData(char *arq){
 		exit(EXIT_FAILURE);
 		return 0;
 	}
-	printf("Passou no opData\n");
+	// printf("Passou no opData\n");
 	return data;
 }

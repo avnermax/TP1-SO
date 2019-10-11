@@ -27,7 +27,6 @@ int main(int argc, char* argv[]){
 			break;
 
 			case 2:
-				printf("teste\n");
 				readData(data, summons);
 			break;
 

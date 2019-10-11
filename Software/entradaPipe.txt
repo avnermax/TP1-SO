@@ -1,3 +1,2 @@
-cat entradaPipe.txt | grep "g"
-ls -l
+cat entradaNormal.txt | grep l
 fim
