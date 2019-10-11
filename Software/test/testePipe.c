@@ -71,7 +71,7 @@ int main(int argc, char ** argv) {
                 //test data : grep toto
                 char * test2[3];
                 test2[0] = "grep\0";
-                test2[1] = "toto\0";
+                test2[1] = "t\0";
                 test2[2] = NULL;
                 printf("Second parent | Av dup2 fd stdout\n");
 
