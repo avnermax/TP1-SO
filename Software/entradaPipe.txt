@@ -1,0 +1,3 @@
+cat entradaPipe.txt | grep "g"
+ls -l
+fim

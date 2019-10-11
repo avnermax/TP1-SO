@@ -1,21 +1,23 @@
 #include "funcoes.h"
 
 int main(int argc, char* argv[]){
-	int iStatus, fd[2], daddy;
+	int fd[2];
 	char *summons;
 	Command *act;
 	FILE *data;
 
 	summons = (char*) malloc(SIZE * sizeof(char));
-	act = (Command*) malloc(sizeof(Command*));
+	act = (Command*) malloc(NPIPES * sizeof(Command*));
 
-	pipe(fd);
+	if(pipe(fd) == -1){
+		perror("Falha ao criar o pipe.");
+		exit(EXIT_FAILURE);
+	}
 	pid_t pid;
 	system("clear");
 
 	if(argc == 2) data = opData(argv[1]);
 
-	daddy = getpid();
 	while(TRUE){
 		// "argc" determina se entrada inicial eh terminal ou arquivo
 		switch(argc){
@@ -29,33 +31,34 @@ int main(int argc, char* argv[]){
 			default: printf("Algo errado, tente novamente.");
 		}
 
-		cmdInterpreter(act, summons, daddy);
+		cmdInterpreter(act, summons);
 
 		pid = fork();
-		if(pid < 0){
-			printf("Erro no fork.\n");
-			exit(EXIT_FAILURE);
-		}
+		switch(pid){
+			case -1:
+				perror("Erro no fork.");
+				exit(EXIT_FAILURE);
+			break;
 
-		if(pid != 0){
-			while(TRUE){
-				waitpid(pid, &iStatus, WUNTRACED);
+			case 0:
+				close(STD_OUTPUT);	// closing standard output
+				dup(fd[WRITE]);		// make standard output go to pipe
+				close(fd[READ]);	// close file descriptors
+				close(fd[WRITE]);
 
-				if(WIFEXITED(iStatus)) {
-					printf("\nStatus de termino: %d.\n", WEXITSTATUS(iStatus));
-					break;
-				}
-				if(WIFSIGNALED(iStatus)){
-					printf("\nFilho terminou e o sinal que terminou o filho foi: %d\n", WTERMSIG(iStatus));
-					break;
-				}
-				if(WIFSTOPPED(iStatus)){
-					printf("\n Filho recebeu sinal de stop. Sinal: %d\n", WSTOPSIG(iStatus));
-				}
-			}
-		}else{
-			printf("Filho em execução: %d\n", getpid());
-			execvp(act->argv[0], act->argv);
+				execvp(act[0].argv[0], act[0].argv);
+			break;
+
+			default:
+				wait(NULL);
+
+				close(STD_INPUT);	// close standard input
+				dup(fd[READ]);		// make standard output go to pipe
+				close(fd[READ]);	// close file descriptors
+				close(fd[WRITE]);
+
+				execvp(act[1].argv[0], act[1].argv);
+			break;
 		}
 	}
 	return 0;
