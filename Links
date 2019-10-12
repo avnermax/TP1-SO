@@ -1,0 +1,13 @@
+https://www.cs.usfca.edu/~sjengle/ucdavis/ecs150-w04/source/pipe.c
+
+https://stackoverflow.com/questions/8129398/persistent-execvp-on-pipe
+
+https://stackoverflow.com/questions/49407406/how-to-redirect-stdout-to-stdin-using-fork-and-pipe-and-execvp-in-c
+
+http://www.cs.loyola.edu/~jglenn/702/S2005/Examples/dup2.html
+
+https://stackoverflow.com/questions/13801175/classic-c-using-pipes-in-execvp-function-stdin-and-stdout-redirection
+
+https://stackoverflow.com/questions/44820443/pipe-of-two-commands-with-fork-execvp-and-then-rederict-the-output-to-socket
+
+
