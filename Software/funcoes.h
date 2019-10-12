@@ -8,8 +8,9 @@
 
 #define TRUE 1
 #define FALSE 0
-#define SIZE 512
-#define NPIPES 2
+
+#define SIZE 512		/* size of arguments */
+#define NPIPES 2		/* number of pipes */
 
 #define STD_INPUT  0    /* file descriptor for standard input */
 #define STD_OUTPUT 1    /* file descriptor for standard output */

@@ -1,2 +1,1 @@
-ls -l | grep a
-fim
+cat entradaNormal.txt | grep a
