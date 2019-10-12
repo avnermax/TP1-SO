@@ -45,7 +45,6 @@ int main(int argc, char* argv[]){
 			break;
 
 			case 0:
-
 				if(existePipe(summonsBckp)){
 					close(STD_OUTPUT);		/* fecha saída padrão */
 					dup(fd[WRITE]);			/* faz saída padrão ir para o pipe */
