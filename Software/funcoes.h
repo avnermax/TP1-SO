@@ -15,8 +15,8 @@
 #define NPIPE 2				// numero de pipes e redirecionamentos.
 #define NPIPES NPIPE * 2	// numero real de pipes que será criado
 
-#define STD_INPUT 0			// arquivo descritor para entrada padrão
-#define STD_OUTPUT 1	    // arquivo descritor para saída padrão
+#define STD_INPUT 0			// descritor para entrada padrão
+#define STD_OUTPUT 1	    // descritor para saída padrão
 
 typedef struct T_Command{
 	int argc;

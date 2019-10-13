@@ -59,6 +59,7 @@ int main(int argc, char* argv[]){
 						dup2(out, 1);
 						close(in);
 						close(out);
+						executaCmd(act, fd, 0, 0);
 					}else{
 						if(dir == 4){
 							strcpy(nameFile2, act[3].argv[0]);
@@ -71,10 +72,10 @@ int main(int argc, char* argv[]){
 							}
 							close(in);
 							close(out);
+							executaCmd(act, fd, 0, 0);
 						}else{
 							close(STD_OUTPUT); // fecha saída padrão.
 							dup(fd[1]); // faz saída padrão ir para o pipe.
-
 							executaCmd(act, fd, 0, 0);
 						}
 					}
@@ -100,21 +101,14 @@ int main(int argc, char* argv[]){
 							}
 							close(in);
 							close(out);
-						}else{
-							executaCmd(act, fd, 0, 0);
 						}
 					}
+
+					executaCmd(act, fd, 0, 0);
 				}
 			break;
 
 			default:
-				for(int x = 0; x < 4; x++){
-					for(int y = 0; y < 2; y++){
-						printf("act[%d].argv[%d]: %s | ", x, y, act[x].argv[y]);
-					}
-					printf("\n");
-				}
-
 				wait(NULL);
 
 				p = existePipe(summonsBckp);
@@ -128,6 +122,8 @@ int main(int argc, char* argv[]){
 						dup2(out, 1);
 						close(in);
 						close(out);
+
+						executaCmd(act, fd, 1, 0);
 					}else{
 						if(dir == 2){
 							strcpy(nameFile1, act[1].argv[0]);
@@ -140,6 +136,8 @@ int main(int argc, char* argv[]){
 							}
 							close(in);
 							close(out);
+
+							executaCmd(act, fd, 1, 0);
 						}else{
 							close(STD_INPUT); // fecha entrada padrão.
 							dup(fd[0]); // faz entrada padrão ir para o pipe.

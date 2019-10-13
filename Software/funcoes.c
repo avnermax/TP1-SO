@@ -7,7 +7,7 @@ void printPrompt(){
 void executaCmd(Command *act, int *fd, int i, int j){
 	int x;
 
-	// fecha descritores de arquivo.
+	// Fecha descritores de arquivo.
 	for(x = 0; x < NPIPES; x++) close(fd[x]);
 
 	if(execvp(act[i].argv[j], act[i].argv) == -1){
@@ -17,7 +17,6 @@ void executaCmd(Command *act, int *fd, int i, int j){
 
 void collectSummons(char *string){
 	fgets(string, SIZE, stdin);
-	// printf("Passou no collectSummons\n");
 }
 
 int existePipe(char *string){
@@ -26,7 +25,6 @@ int existePipe(char *string){
 	for(int i = 0; i < strlen(string); i++){
 		if(string[i] == '|') return i;
 	}
-	// printf("Passou no existePipe\n");
 	return p;
 }
 
@@ -48,7 +46,6 @@ int existeRedirecao(char *string, int p){
 			return p;
 		}
 	}
-	// printf("Passou no existeRedirecao\n");
 	if(p == 2) p = 0;
 	return p;
 }
@@ -68,7 +65,6 @@ char ** fracPipe(char *string){
 	}
 
 	shift[i] = NULL;
-	// printf("Passou no fracPipe\n");
 	return shift;
 }
 
@@ -87,7 +83,6 @@ char ** fracRedirecaoOut(char *string){
 	}
 
 	shift[i] = NULL;
-	// printf("Passou no fracRedirecaoDir\n");
 	return shift;
 }
 
@@ -106,7 +101,6 @@ char ** fracRedirecaoIn(char *string){
 	}
 
 	shift[i] = NULL;
-	// printf("Passou no fracRedirecaoEsq\n");
 	return shift;
 }
 
@@ -122,7 +116,6 @@ int fracArg(char **shift, char *string){
 		i++;
 	}
 	shift[i] = NULL;
-	// printf("Passou no fracArg\n");
 	return i;
 }
 
@@ -155,7 +148,6 @@ void cmdRedirecionamento(Command *act, char *string, int x){
 			cmdString(act, string, x);
 		}
 	}
-	// printf("Passou no cmdRedirecionamento\n");
 }
 
 void cmdString(Command *act, char *string, int x){
@@ -166,7 +158,6 @@ void cmdString(Command *act, char *string, int x){
 	i = act[x].argc - 1;
 	j = strlen(act[x].argv[i]) - 1;
 	if (act[x].argv[i][j] == '\n') act[x].argv[i][j] = '\0';
-	// printf("Passou no cmdString\n");
 }
 
 void cmdInterpreter(Command *act, char *string){
@@ -174,7 +165,6 @@ void cmdInterpreter(Command *act, char *string){
 	char **stringPipe;
 
 	if(strcmp(string, "fim\n") == 0){
-		// printf("Passou no cmdInterpreter\n");
 		exit(EXIT_SUCCESS);
 	}else{
 		if(existePipe(string)){ // Verifica se existe pipe.
@@ -194,7 +184,6 @@ void cmdInterpreter(Command *act, char *string){
 			cmdRedirecionamento(act, string, x);
 		}
 	}
-	// printf("Passou no cmdInterpreter\n");
 }
 
 void readData(FILE *data, char *string){
@@ -204,7 +193,6 @@ void readData(FILE *data, char *string){
 		fclose(data);
 		exit(EXIT_SUCCESS);
 	}
-	// printf("Passou no readData\n");
 }
 
 FILE * opData(char *arq){
@@ -214,6 +202,5 @@ FILE * opData(char *arq){
 		exit(EXIT_FAILURE);
 		return 0;
 	}
-	// printf("Passou no opData\n");
 	return data;
 }
