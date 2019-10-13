@@ -4,28 +4,45 @@ void printPrompt(){
 	printf("summons:> ");
 }
 
-void collectSummons(char *summons){
-	fgets(summons, SIZE, stdin);
-	// printf("Passou no collectSummons\n");
+void collectSummons(char *string){
+	fgets(string, SIZE, stdin);
+	printf("Passou no collectSummons\n");
 }
 
-int existePipe(char *summons){
+int existePipe(char *string){
 	int p = 0;
 
-	for(int i = 0; i < strlen(summons); i++){
-		if(summons[i] == '|') p++;
+	for(int i = 0; i < strlen(string); i++){
+		if(string[i] == '|') p++;
 	}
-	// printf("Passou no existePipe\n");
+	printf("Passou no existePipe\n");
 	return p;
 }
 
-char ** fracPipe(char *summons){
+int existeRedirecao(char *string){
+	int p = 0;
+
+	for(int i = 0; i < strlen(string) - 1; i++){
+		if(string[i] == '=' && string[i + 1] == '>'){
+			p = 1;
+			return p;
+		}
+		if(string[i] == '<' && string[i + 1] == '='){
+			p = 2;
+			return p;
+		}
+	}
+	printf("Passou no existeRedirecao\n");
+	return p;
+}
+
+char ** fracPipe(char *string){
 	int i = 0;
 	char *aux, **shift;
 
-	shift = (char**) malloc(NPIPES * sizeof(char));
+	shift = (char**) malloc(NPIPE * sizeof(char));
 
-	aux = strtok(summons, "|");
+	aux = strtok(string, "|");
 	while(aux != NULL){
 		shift[i] = (char*) malloc(strlen(aux) * sizeof(char));
 		strcpy(shift[i], aux);
@@ -34,7 +51,45 @@ char ** fracPipe(char *summons){
 	}
 
 	shift[i] = NULL;
-	// printf("Passou no fracPipe\n");
+	printf("Passou no fracPipe\n");
+	return shift;
+}
+
+char ** fracRedirecaoOut(char *string){
+	int i = 0;
+	char *aux, **shift;
+
+	shift = (char**) malloc(NPIPE * sizeof(char));
+
+	aux = strtok(string, "=>");
+	while(aux != NULL){
+		shift[i] = (char*) malloc(strlen(aux) * sizeof(char));
+		strcpy(shift[i], aux);
+		aux = strtok(NULL, "=>");
+		i++;
+	}
+
+	shift[i] = NULL;
+	printf("Passou no fracRedirecaoDir\n");
+	return shift;
+}
+
+char ** fracRedirecaoIn(char *string){
+	int i = 0;
+	char *aux, **shift;
+
+	shift = (char**) malloc(NPIPE * sizeof(char));
+
+	aux = strtok(string, "<=");
+	while(aux != NULL){
+		shift[i] = (char*) malloc(strlen(aux) * sizeof(char));
+		strcpy(shift[i], aux);
+		aux = strtok(NULL, "<=");
+		i++;
+	}
+
+	shift[i] = NULL;
+	printf("Passou no fracRedirecaoEsq\n");
 	return shift;
 }
 
@@ -50,48 +105,89 @@ int fracArg(char **shift, char *string){
 		i++;
 	}
 	shift[i] = NULL;
-	// printf("Passou no fracArg\n");
+	printf("Passou no fracArg\n");
 	return i;
 }
 
-void cmdInterpreter(Command *act, char *summons){
-	int i, j, x;
-	char **stringAux;
+void cmdRedirecionamento(Command *act, char *string, int x){
+	int y, direcao;
+	char **stringOut, **stringIn;
 
-	if(strcmp(summons, "fim\n") == 0){
-		// printf("Passou no cmdInterpreter\n");
-		exit(EXIT_SUCCESS);
+	direcao = existeRedirecao(string); // Verifica se existe redirecionamento de entrada ou saída.
+	if(direcao == 1){ // Caso encontrar redirecionamento de saída.
+		stringOut = fracRedirecaoOut(string); // Fragmenta a string em relação ao redirecionamento de saída.
+
+		for(y = 0; y < NPIPE; y++){
+			if(stringOut[y] != NULL){
+				if(x == 0) cmdString(act, stringOut[y], y);
+				if(x == 1) cmdString(act, stringOut[y], y + 2);
+			}
+		}
 	}else{
-		if(existePipe(summons)){
-			stringAux = fracPipe(summons);
-			if(stringAux != NULL){
-				for(x = 0; x < NPIPES; x++){
-					act[x].argc = fracArg(act[x].argv, stringAux[x]);
-					// Normaliza o final do comando, caso ele tenha um '\n'.
-					i = act[x].argc - 1;
-					j = strlen(act[x].argv[i]) - 1;
-					if (act[x].argv[i][j] == '\n') act[x].argv[i][j] = '\0';
+		if(direcao == 2){ // Caso econtrar redirecionamento de entrada.
+			stringIn = fracRedirecaoIn(string); // Fragmenta a string em relação ao redirecionamento de entrada.
+
+			for(y = 0; y < NPIPE; y++){
+				if(stringIn[y] != NULL){
+					if(x == 0) cmdString(act, stringIn[y], y);
+					if(x == 1) cmdString(act, stringIn[y], y + 2);
 				}
 			}
 		}else{
-			act[0].argc = fracArg(act[0].argv, summons);
-			// Normaliza o final do comando, caso ele tenha um '\n'.
-			i = act[0].argc - 1;
-			j = strlen(act[0].argv[i]) - 1;
-			if (act[0].argv[i][j] == '\n') act[0].argv[i][j] = '\0';
+			// Caso não encontrar nenhum redirecionamento, de entrada ou saída.
+			cmdString(act, string, x);
 		}
 	}
-	// printf("Passou no cmdInterpreter\n");
+	printf("Passou no cmdRedirecionamento\n");
 }
 
-void readData(FILE *data, char *summons){
+void cmdString(Command *act, char *string, int x){
+	int i, j;
+
+	act[x].argc = fracArg(act[x].argv, string); // Fragmenta e grava na struc cada comando.
+	// Normaliza o final do comando, caso ele tenha um '\n'.
+	i = act[x].argc - 1;
+	j = strlen(act[x].argv[i]) - 1;
+	if (act[x].argv[i][j] == '\n') act[x].argv[i][j] = '\0';
+	printf("Passou no cmdString\n");
+}
+
+void cmdInterpreter(Command *act, char *string){
+	int x = 0;
+	char **stringPipe;
+
+	if(strcmp(string, "fim\n") == 0){
+		printf("Passou no cmdInterpreter\n");
+		exit(EXIT_SUCCESS);
+	}else{
+		if(existePipe(string)){ // Verifica se existe pipe.
+			stringPipe = fracPipe(string); // Fragmenta a string do comando em duas, em relação ao pipe.
+
+			for(x = 0; x < NPIPE; x++){ // Testa cada string adquirida ao fragmentar pelo pipe.
+				if(stringPipe[x] != NULL){
+					cmdRedirecionamento(act, stringPipe[x], x);
+				}else{
+					// Mostrar erro, pois uma string originada na fragmentação é null.
+					printf("Algum comando inválido encontrado.\n");
+					exit(EXIT_FAILURE);
+				}
+			}
+		}else{
+			// Caso não exista pipe, porém existe redirecionamento, ou não existam ambos.
+			cmdRedirecionamento(act, string, x);
+		}
+	}
+	printf("Passou no cmdInterpreter\n");
+}
+
+void readData(FILE *data, char *string){
 	if(!feof(data)){
-		fgets(summons, SIZE, data);
+		fgets(string, SIZE, data);
 	}else{
 		fclose(data);
 		exit(EXIT_SUCCESS);
 	}
-	// printf("Passou no readData\n");
+	printf("Passou no readData\n");
 }
 
 FILE * opData(char *arq){
@@ -101,6 +197,6 @@ FILE * opData(char *arq){
 		exit(EXIT_FAILURE);
 		return 0;
 	}
-	// printf("Passou no opData\n");
+	printf("Passou no opData\n");
 	return data;
 }

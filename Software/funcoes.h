@@ -9,13 +9,14 @@
 #define TRUE 1
 #define FALSE 0
 
-#define SIZE 512		/* size of arguments */
-#define NPIPES 2		/* number of pipes */
+#define SIZE 512			/* tamanho dos argumentos */
+#define NPIPE 2				/* numero de pipes e redirecionamentos */
+#define NPIPES NPIPE * 2	/* numero real de pipes que será criado */
 
-#define STD_INPUT  0    /* file descriptor for standard input */
-#define STD_OUTPUT 1    /* file descriptor for standard output */
-#define READ  0         /* read file descriptor from pipe */
-#define WRITE 1         /* write file descriptor from pipe */
+#define STD_INPUT  0    /* arquivo descritor para entrada padrão */
+#define STD_OUTPUT 1    /* arquivo descritor para saída padrão */
+#define READ  0         /* arquivo descritor de leitura do pipe */
+#define WRITE 1         /* arquivo descritor de escrita do pipe */
 
 typedef struct T_Command{
 	int argc;
@@ -26,16 +27,24 @@ void printPrompt();
 
 void collectSummons(char *summons);
 
-int existePipe(char *summons);
+int existePipe(char *string);
 
-char ** fracPipe(char *summons);
+int existeRedirecao(char *string);
+
+char ** fracPipe(char *string);
+
+char ** fracRedirecaoOut(char *string);
+
+char ** fracRedirecaoIn(char *string);
 
 int fracArg(char **shift, char *string);
 
-void cmdInterpreter(Command *act, char *summons);
+void cmdRedirecionamento(Command *act, char *string, int x);
 
-void fracSummons(char *summons, Command *act, int j);
+void cmdString(Command *act, char *string, int x);
 
-void readData(FILE *data, char *summons);
+void cmdInterpreter(Command *act, char *string);
+
+void readData(FILE *data, char *string);
 
 FILE * opData(char *arq);
