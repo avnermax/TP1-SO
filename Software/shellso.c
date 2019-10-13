@@ -55,7 +55,7 @@ int main(int argc, char* argv[]){
 					if(dir == 3){
 						strcpy(nameFile2, act[3].argv[0]);
 						// Abre/cria arquivo para gravar os dados passados no pipe.
-						out = open(nameFile2, O_WRONLY | O_TRUNC | O_CREAT);
+						out = open(nameFile2, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
 						dup2(out, 1);
 						close(in);
 						close(out);
@@ -84,7 +84,7 @@ int main(int argc, char* argv[]){
 					if(dir == 1){
 						strcpy(nameFile1, act[1].argv[0]);
 						// Abre/cria arquivo para gravar os dados passados no pipe.
-						out = open(nameFile1, O_WRONLY | O_TRUNC | O_CREAT);
+						out = open(nameFile1, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
 						dup2(out, 1);
 						close(in);
 						close(out);
@@ -124,7 +124,7 @@ int main(int argc, char* argv[]){
 					if(dir == 1){
 						strcpy(nameFile1, act[1].argv[0]);
 						// Abre/cria arquivo para gravar os dados passados no pipe.
-						out = open(nameFile1, O_WRONLY | O_TRUNC | O_CREAT);
+						out = open(nameFile1, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
 						dup2(out, 1);
 						close(in);
 						close(out);
