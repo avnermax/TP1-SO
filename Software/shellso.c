@@ -24,7 +24,8 @@ int main(int argc, char* argv[]){
 	if(argc == 2) data = opData(argv[1]);
 
 	while(TRUE){
-		switch(argc){ // determina se a execução ocorrerá pelo arquivo de entrada ou não.
+
+		switch(argc){ // Determina se a execução ocorrerá pelo arquivo de entrada ou não.
 			case 1:
 				printPrompt();
 				collectSummons(summons);
@@ -37,8 +38,13 @@ int main(int argc, char* argv[]){
 			default: printf("Algo errado, tente novamente.");
 		}
 
-		strcpy(summonsBckp, summons); // faz o backup da linha de comando.
-		cmdInterpreter(act, summons); // interpreta e separa os comandos.
+		strcpy(summonsBckp, summons); // Faz o backup da linha de comando.
+		if(strcmp(summons, "\n") != 0){
+			cmdInterpreter(act, summons); // Interpreta e separa os comandos.
+		}else{
+			strcpy(summons, " "); // Reseta o summons.
+			continue;
+		}
 
 		pid = fork();
 		switch(pid){
@@ -75,7 +81,7 @@ int main(int argc, char* argv[]){
 							executaCmd(act, fd, 0, 0);
 						}else{
 							close(STD_OUTPUT); // fecha saída padrão.
-							dup(fd[1]); // faz saída padrão ir para o pipe.
+							dup(fd[1]); // Faz saída padrão ir para o pipe.
 							executaCmd(act, fd, 0, 0);
 						}
 					}
@@ -139,8 +145,8 @@ int main(int argc, char* argv[]){
 
 							executaCmd(act, fd, 1, 0);
 						}else{
-							close(STD_INPUT); // fecha entrada padrão.
-							dup(fd[0]); // faz entrada padrão ir para o pipe.
+							close(STD_INPUT); // Fecha entrada padrão.
+							dup(fd[0]); // Faz entrada padrão ir para o pipe.
 
 							executaCmd(act, fd, 1, 0);
 						}

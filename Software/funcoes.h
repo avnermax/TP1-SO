@@ -11,12 +11,12 @@
 #define TRUE 1
 #define FALSE 0
 
-#define SIZE 512			// tamanho dos argumentos.
-#define NPIPE 2				// numero de pipes e redirecionamentos.
-#define NPIPES NPIPE * 2	// numero real de pipes que será criado
+#define SIZE 512			// Tamanho dos argumentos.
+#define NPIPE 2				// Numero de pipes e redirecionamentos.
+#define NPIPES NPIPE * 2	// Numero real de pipes que será criado
 
-#define STD_INPUT 0			// descritor para entrada padrão
-#define STD_OUTPUT 1	    // descritor para saída padrão
+#define STD_INPUT 0			// Descritor para entrada padrão
+#define STD_OUTPUT 1	    // Descritor para saída padrão
 
 typedef struct T_Command{
 	int argc;
