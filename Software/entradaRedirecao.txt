@@ -1,2 +1,2 @@
-cat -n <= entradaNormal.txt
+cat -n <= entradaNormal.txt | wc -l
 fim

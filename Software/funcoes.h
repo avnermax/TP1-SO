@@ -31,7 +31,7 @@ void collectSummons(char *summons);
 
 int existePipe(char *string);
 
-int existeRedirecao(char *string);
+int existeRedirecao(char *string, int p);
 
 char ** fracPipe(char *string);
 
