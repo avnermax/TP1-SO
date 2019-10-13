@@ -15,8 +15,6 @@
 
 #define STD_INPUT 0			// arquivo descritor para entrada padrão
 #define STD_OUTPUT 1	    // arquivo descritor para saída padrão
-#define READ 0				// arquivo descritor de leitura do pipe
-#define WRITE 1				// arquivo descritor de escrita do pipe
 
 typedef struct T_Command{
 	int argc;
