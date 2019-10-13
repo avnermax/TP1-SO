@@ -45,7 +45,7 @@ int main(int argc, char* argv[]){
 			break;
 
 			case 0:
-				printf("aqui2\n");
+				printf("2\n");
 				dir = existeRedirecao(summonsBckp);
 				if(dir == 1 || existePipe(summonsBckp)){
 					close(STD_OUTPUT); // fecha saída padrão.
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]){
 			break;
 
 			default:
-				printf("aqui\n");
+				printf("1\n");
 				wait(NULL);
 
 				if(existePipe(summonsBckp)){
