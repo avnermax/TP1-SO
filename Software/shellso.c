@@ -1,14 +1,14 @@
 #include "funcoes.h"
 
 int main(int argc, char* argv[]){
-	int fd[NPIPES], dir, x;
+	int fd[NPIPES], dir;
 	char *summons, *summonsBckp;
 	Command *act;
-	FILE *data, *dataAux;
+	FILE *data;
 
-	summons = (char*) malloc(SIZE * sizeof(char));		/* armazena linha relacionada ao comando */
-	summonsBckp = (char*) malloc(SIZE * sizeof(char));	/* backup da linha de comando */
-	act = (Command*) malloc((NPIPES) * sizeof(Command*));	/* armazena o tamanho e os comandos já separados */
+	summons = (char*) malloc(SIZE * sizeof(char));		// armazena linha relacionada ao comando.
+	summonsBckp = (char*) malloc(SIZE * sizeof(char));	// backup da linha de comando.
+	act = (Command*) malloc(NPIPES * sizeof(Command*));	// armazena o tamanho e os comandos já separados.
 
 	if(pipe(fd) == -1){
 		perror("Falha ao criar o pipe.");
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
 	if(argc == 2) data = opData(argv[1]);
 
 	while(TRUE){
-		switch(argc){ /* determina se a execução ocorrerá pelo arquivo de entrada ou não */
+		switch(argc){ // determina se a execução ocorrerá pelo arquivo de entrada ou não.
 			case 1:
 				printPrompt();
 				collectSummons(summons);
@@ -34,8 +34,8 @@ int main(int argc, char* argv[]){
 			default: printf("Algo errado, tente novamente.");
 		}
 
-		strcpy(summonsBckp, summons);	/* faz o backup da linha de comando */
-		cmdInterpreter(act, summons); 	/* interpreta e separa os comandos */
+		strcpy(summonsBckp, summons); // faz o backup da linha de comando.
+		cmdInterpreter(act, summons); // interpreta e separa os comandos.
 
 		pid = fork();
 		switch(pid){
@@ -48,28 +48,20 @@ int main(int argc, char* argv[]){
 				printf("aqui2\n");
 				dir = existeRedirecao(summonsBckp);
 				if(dir == 1 || existePipe(summonsBckp)){
-					close(STD_OUTPUT);		/* fecha saída padrão */
-					dup(fd[WRITE]);			/* faz saída padrão ir para o pipe */
-
-					/* fecha descritores de arquivo */
-					for(x = 0; x < NPIPES; x++) close(fd[x]);
+					close(STD_OUTPUT); // fecha saída padrão.
+					dup(fd[1]); // faz saída padrão ir para o pipe.
 
 					// abrir/criar arquivo para gravar os dados passados no pipe
 				}else{
 					if(dir == 2){
 						// abrir arquivo para pegar os dados
 
-						close(STD_INPUT);		/* fecha entrada padrão */
-						dup(fd[READ]);			/* faz entrada padrão ir para o pipe */
-
-						/* fecha descritores de arquivo */
-						for(x = 0; x < NPIPES; x++) close(fd[x]);
+						close(STD_INPUT); // fecha entrada padrão.
+						dup(fd[0]); // faz entrada padrão ir para o pipe.
 					}
 				}
 
-				if(execvp(act[0].argv[0], act[0].argv) == -1){
-					perror("execvp2");
-				}
+				executaCmd(act, fd, 0, 0);
 			break;
 
 			default:
@@ -77,15 +69,10 @@ int main(int argc, char* argv[]){
 				wait(NULL);
 
 				if(existePipe(summonsBckp)){
-					close(STD_INPUT);		/* fecha entrada padrão */
-					dup(fd[READ]);			/* faz entrada padrão ir para o pipe */
+					close(STD_INPUT); // fecha entrada padrão.
+					dup(fd[0]); // faz entrada padrão ir para o pipe.
 
-					/* fecha descritores de arquivo */
-					for(x = 0; x < NPIPES; x++) close(fd[x]);
-
-					if(execvp(act[1].argv[0], act[1].argv) == -1){
-						perror("execvp1");
-					}
+					executaCmd(act, fd, 1, 0);
 				}
 			break;
 		}

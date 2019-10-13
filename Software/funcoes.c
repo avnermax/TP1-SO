@@ -4,6 +4,17 @@ void printPrompt(){
 	printf("summons:> ");
 }
 
+void executaCmd(Command *act, int *fd, int i, int j){
+	int x;
+
+	// fecha descritores de arquivo.
+	for(x = 0; x < NPIPES; x++) close(fd[x]);
+
+	if(execvp(act[i].argv[j], act[i].argv) == -1){
+		perror("execvp2");
+	}
+}
+
 void collectSummons(char *string){
 	fgets(string, SIZE, stdin);
 	printf("Passou no collectSummons\n");
